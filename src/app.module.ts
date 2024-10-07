@@ -9,6 +9,7 @@ import { AppService } from './app.service';
 import { AlertModule } from './alert/alert.module';
 import { UserModule } from './user/user.module';
 import { AuthModule } from './auth/auth.module';
+import { DeviceModule } from './device/device.module';
 
 
 @Module({
@@ -33,6 +34,7 @@ import { AuthModule } from './auth/auth.module';
   AlertModule,
   UserModule,
   AuthModule,
+  DeviceModule,
   ],
   controllers: [AppController],
   providers: [AppService],

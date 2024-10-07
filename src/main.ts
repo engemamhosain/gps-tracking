@@ -11,6 +11,14 @@ async function bootstrap() {
     .setDescription('API description')
     .setVersion('1.0')
     .addTag('users') // Add tags if needed
+    .addBearerAuth(
+      {
+        type: 'http',
+        scheme: 'bearer',
+        bearerFormat: 'JWT',
+      },
+      'access-token', // This is the key that Swagger will use to identify the token in API requests.
+    )
     .build();
 
   const document = SwaggerModule.createDocument(app, config);

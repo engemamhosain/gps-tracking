@@ -1,5 +1,6 @@
 import { Entity, Column, PrimaryGeneratedColumn, BeforeInsert,CreateDateColumn,OneToMany } from 'typeorm';
 import * as bcrypt from 'bcryptjs';
+import { Device } from 'src/device/entities/device.entity';
 
 @Entity()
 export class User {
@@ -14,8 +15,8 @@ export class User {
 
   @Column({ default: true })
   isActive: boolean;
-  // @OneToMany(() => Device, device => device.user) // One user can have multiple devices
-  // devices: Device[];
+  @OneToMany(() => Device, device => device.user) // One user can have multiple devices
+  devices: Device[];
 
    // You can use ENUM to define the user type or role
    @Column({
