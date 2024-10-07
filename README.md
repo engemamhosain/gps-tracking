@@ -1,86 +1,157 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+mysql schema
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+-- Users Table
+CREATE TABLE users (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  username VARCHAR(50) NOT NULL UNIQUE,
+  email VARCHAR(100) NOT NULL UNIQUE,
+  password VARCHAR(255) NOT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+-- Devices Table
+CREATE TABLE devices (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  user_id INT,
+  device_name VARCHAR(100),
+  device_serial_number VARCHAR(100) UNIQUE,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+);
 
-## Description
+-- Locations Table
+CREATE TABLE locations (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  device_id INT,
+  latitude DECIMAL(10, 8) NOT NULL,
+  longitude DECIMAL(11, 8) NOT NULL,
+  altitude DECIMAL(8, 2) NULL,
+  speed DECIMAL(5, 2) NULL,
+  timestamp DATETIME NOT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (device_id) REFERENCES devices(id) ON DELETE CASCADE
+);
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+-- Geofence Table (Optional)
+CREATE TABLE geofence (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  device_id INT,
+  fence_name VARCHAR(100),
+  center_latitude DECIMAL(10, 8) NOT NULL,
+  center_longitude DECIMAL(11, 8) NOT NULL,
+  radius DECIMAL(6, 2) NOT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (device_id) REFERENCES devices(id) ON DELETE CASCADE
+);
 
-## Project setup
+-- Alerts Table (Optional)
+CREATE TABLE alerts (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  device_id INT,
+  alert_type VARCHAR(50),
+  message TEXT,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (device_id) REFERENCES devices(id) ON DELETE CASCADE
+);
 
-```bash
-$ npm install
-```
 
-## Compile and run the project
+*********************************
 
-```bash
-# development
-$ npm run start
 
-# watch mode
-$ npm run start:dev
+-- Plans Table
+CREATE TABLE plans (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  name VARCHAR(50) NOT NULL,
+  description TEXT,
+  price DECIMAL(10, 2) NOT NULL,
+  duration INT NOT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
 
-# production mode
-$ npm run start:prod
-```
+-- Subscriptions Table
+CREATE TABLE subscriptions (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  user_id INT,
+  plan_id INT,
+  start_date DATE NOT NULL,
+  end_date DATE NOT NULL,
+  status ENUM('active', 'expired') DEFAULT 'active',
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+  FOREIGN KEY (plan_id) REFERENCES plans(id) ON DELETE CASCADE
+);
 
-## Run tests
+-- Payments Table
+CREATE TABLE payments (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  user_id INT,
+  subscription_id INT,
+  amount DECIMAL(10, 2) NOT NULL,
+  payment_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  payment_method ENUM('credit_card', 'paypal', 'bank_transfer'),
+  payment_status ENUM('pending', 'completed', 'failed') DEFAULT 'pending',
+  FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+  FOREIGN KEY (subscription_id) REFERENCES subscriptions(id) ON DELETE CASCADE
+);
 
-```bash
-# unit tests
-$ npm run test
+-- Billing Cycle Table (Optional)
+CREATE TABLE billing_cycles (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  user_id INT,
+  subscription_id INT,
+  billing_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  next_billing_date TIMESTAMP,
+  status ENUM('paid', 'pending', 'overdue') DEFAULT 'pending',
+  FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+  FOREIGN KEY (subscription_id) REFERENCES subscriptions(id) ON DELETE CASCADE
+);
 
-# e2e tests
-$ npm run test:e2e
+-- Notifications Table (Optional)
+CREATE TABLE notifications (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  user_id INT,
+  message TEXT,
+  notification_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  read_status ENUM('read', 'unread') DEFAULT 'unread',
+  FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+);
 
-# test coverage
-$ npm run test:cov
-```
 
-## Resources
 
-Check out a few resources that may come in handy when working with NestJS:
 
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
+nest generate module auth
+nest generate service auth
+nest generate controller auth
 
-## Support
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
 
-## Stay in touch
+nest generate module User
+nest generate service User
+nest generate controller User
 
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+nest generate module device
+nest generate service device
+nest generate controller device
 
-## License
+nest generate module Route
+nest generate service Route
+nest generate controller Route
 
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
-# gps-tracking
+nest generate module Alert
+nest generate service Alert
+nest generate controller Alert
+
+nest generate module Geofence
+nest generate service Geofence
+nest generate controller Geofence
+
+nest generate module Trip
+nest generate service Trip
+nest generate controller Trip
+
+
+api
+
+curl -X POST http://localhost:3000/auth/register \
+     -H "Content-Type: application/json" \
+     -d '{"username": "testuser", "password": "testpassword"}'
