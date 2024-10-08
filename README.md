@@ -133,6 +133,12 @@ nest generate module device
 nest generate service device
 nest generate controller device
 
+
+nest generate module location
+nest generate service location
+nest generate controller location
+
+
 nest generate module Route
 nest generate service Route
 nest generate controller Route

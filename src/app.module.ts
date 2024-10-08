@@ -10,6 +10,8 @@ import { AlertModule } from './alert/alert.module';
 import { UserModule } from './user/user.module';
 import { AuthModule } from './auth/auth.module';
 import { DeviceModule } from './device/device.module';
+import { LocationModule } from './location/location.module';
+import { GeofenceModule } from './geofence/geofence.module';
 
 
 @Module({
@@ -35,6 +37,8 @@ import { DeviceModule } from './device/device.module';
   UserModule,
   AuthModule,
   DeviceModule,
+  LocationModule,
+  GeofenceModule,
   ],
   controllers: [AppController],
   providers: [AppService],

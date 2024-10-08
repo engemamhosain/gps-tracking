@@ -16,6 +16,7 @@ async function bootstrap() {
         type: 'http',
         scheme: 'bearer',
         bearerFormat: 'JWT',
+        in: 'header', // Ensure the JWT is passed in the header
       },
       'access-token', // This is the key that Swagger will use to identify the token in API requests.
     )

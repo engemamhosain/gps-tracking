@@ -25,39 +25,26 @@ export class DeviceService {
     return this.deviceRepository.save(newDevice);
   }
 
-  // Find all devices associated with a user
-  async findByUser(user: User): Promise<Device[]> {
-    return this.deviceRepository.find({
-      where: { user },
-    });
+  async findAll(user: User): Promise<Device[]> {
+    return this.deviceRepository.find({ where: { user:{id:user.id} } });
   }
 
-  // Find a specific device by ID
-  async findOneById(id: number): Promise<Device> {
-    const device = await this.deviceRepository.findOne({
-        where: { id },
-      });
-    if (!device) {
-      throw new NotFoundException(`Device with ID ${id} not found`);
-    }
-    return device;
+  async findOne(id: number, user: User): Promise<Device> {
+    return this.deviceRepository.findOne({ where: { id, user:{id:user.id} } });
   }
 
-  // Update a device
-  async update(id: number, createDeviceDto: CreateDeviceDto): Promise<Device> {
-    const device = await this.findOneById(id);
-
-    device.device_name = createDeviceDto.device_name;
-    device.device_serial_number = createDeviceDto.device_serial_number;
-
-    return this.deviceRepository.save(device);
+  async findOneBySerialNumber(device_serial_number: string, user: User): Promise<Device> {
+    return this.deviceRepository.findOne({ where: { device_serial_number, user:{id:user.id} } });
   }
 
-  // Delete a device
-  async delete(id: number): Promise<void> {
-    const result = await this.deviceRepository.delete(id);
-    if (result.affected === 0) {
-      throw new NotFoundException(`Device with ID ${id} not found`);
-    }
+
+  async update(id: number, updateDeviceDto: CreateDeviceDto, user: User): Promise<Device> {
+    await this.deviceRepository.update({ id, user }, updateDeviceDto);
+    return this.deviceRepository.findOne({ where: { id, user:{id:user.id}  } });
   }
+
+  async remove(id: number, user: User): Promise<void> {
+    await this.deviceRepository.delete({ id, user:{id:user.id}  });
+  }
+
 }

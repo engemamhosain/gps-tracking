@@ -1,5 +1,7 @@
-import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, CreateDateColumn } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, CreateDateColumn, OneToMany } from 'typeorm';
 import { User } from '../../user/entities/user.entity';
+import { Location } from '../../location/entities/location.entity';
+import { Geofence } from 'src/geofence/entities/geofence.entity';
 
 @Entity()
 export class Device {
@@ -17,4 +19,10 @@ export class Device {
 
   @ManyToOne(() => User, user => user.devices, { onDelete: 'CASCADE' }) // A user can have multiple devices
   user: User;
+
+  @OneToMany(() => Location, Location => Location.device, { onDelete: 'CASCADE' }) // A user can have multiple devices
+  locations: Location;
+
+  @OneToMany(() => Geofence, geofence => geofence.devices, { onDelete: 'CASCADE' }) // A user can have multiple devices
+  geofence: Geofence;
 }
