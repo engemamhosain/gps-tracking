@@ -119,6 +119,10 @@ CREATE TABLE notifications (
 
 
 
+nest generate module Admin
+nest generate service Admin
+nest generate controller Admin
+
 nest generate module auth
 nest generate service auth
 nest generate controller auth

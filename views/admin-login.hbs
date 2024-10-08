@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Login</title>
+    <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+    <div class="login-container">
+        <h1>Admin Login</h1>
+        {{#if error}}
+            <div class="error">{{error}}</div>
+        {{/if}}
+        <form action="/admin/login" method="POST">
+            <label for="username">Username</label>
+            <input type="text" id="username" name="username" required>
+
+            <label for="password">Password</label>
+            <input type="password" id="password" name="password" required>
+
+            <label for="profession">Select Profession</label>
+            <select id="profession" name="profession" required>
+                <option value="" disabled selected>Select your profession</option>
+                <option value="admin">Admin</option>
+                <option value="manager">Manager</option>
+                <option value="developer">Developer</option>
+                <option value="analyst">Analyst</option>
+                <option value="designer">Designer</option>
+            </select>
+
+            <button type="submit">Login</button>
+        </form>
+    </div>
+</body>
+</html>

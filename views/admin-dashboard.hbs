@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+    <link rel="stylesheet" href="/styles.css"> <!-- Link your CSS file -->
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+        .dashboard-container {
+            width: 80%;
+            margin: 20px auto;
+            background: white;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            color: #333;
+        }
+        .card {
+            padding: 15px;
+            margin: 10px 0;
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard-container">
+        <h1>Admin Dashboard</h1>
+        <div class="card">
+            <h2>Total Users</h2>
+            <p id="totalUsers">Loading...</p>
+        </div>
+        <div class="card">
+            <h2>Total Devices</h2>
+            <p id="totalDevices">Loading...</p>
+        </div>
+        <div class="card">
+            <h2>Device Registrations</h2>
+            <form action="/admin/devices" method="POST">
+                <label for="userId">User ID</label>
+                <input type="number" id="userId" name="userId" required>
+
+                <label for="device_name">Device Name</label>
+                <input type="text" id="device_name" name="device_name" required>
+
+                <label for="device_serial_number">Device Serial Number</label>
+                <input type="text" id="device_serial_number" name="device_serial_number" required>
+
+                <button type="submit">Register Device</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Fetch total users and devices
+        async function fetchStats() {
+            const totalUsersResponse = await fetch('/admin/stats/users');
+            const totalDevicesResponse = await fetch('/admin/stats/devices');
+            const totalUsers = await totalUsersResponse.json();
+            const totalDevices = await totalDevicesResponse.json();
+
+            document.getElementById('totalUsers').innerText = totalUsers.count;
+            document.getElementById('totalDevices').innerText = totalDevices.count;
+        }
+        //fetchStats();
+    </script>
+</body>
+</html>
