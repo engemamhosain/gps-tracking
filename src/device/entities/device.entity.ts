@@ -2,6 +2,7 @@ import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, CreateDateColumn, On
 import { User } from '../../user/entities/user.entity';
 import { Location } from '../../location/entities/location.entity';
 import { Geofence } from 'src/geofence/entities/geofence.entity';
+import { Subscription } from 'src/subscription/entities/subscription.entity';
 
 @Entity()
 export class Device {
@@ -10,6 +11,19 @@ export class Device {
 
   @Column({ unique: true })
   device_serial_number: string;
+
+  @Column()
+  vehicle_name: string;
+  @Column()
+  vehicle_number: string;
+
+
+  @Column({
+    type: 'enum', // Specifies that the column uses an ENUM type
+    enum: ['bike', 'car'], // Enum values: 'user' or 'admin'
+    default: 'car', // Default role is 'user'
+  })
+  vehicle_type: 'bike' | 'car';
 
   @Column()
   device_name: string;
@@ -25,4 +39,7 @@ export class Device {
 
   @OneToMany(() => Geofence, geofence => geofence.devices, { onDelete: 'CASCADE' }) // A user can have multiple devices
   geofence: Geofence;
+
+  @OneToMany(() => Subscription, subscription => subscription.device) // One user can have multiple devices
+  subscriptions: Subscription[];
 }

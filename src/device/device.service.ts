@@ -47,4 +47,42 @@ export class DeviceService {
     await this.deviceRepository.delete({ id, user:{id:user.id}  });
   }
 
+
+  async getDeviceDetails(serialNumber: string) {
+    const device = await this.deviceRepository
+      .createQueryBuilder('device')
+      .leftJoinAndSelect('device.subscriptions', 'subscription')
+      .leftJoinAndSelect('device.locations', 'location')
+      .where('device.device_serial_number = :serialNumber', { serialNumber })
+      .getOne();
+
+    if (!device) {
+      throw new NotFoundException('Device not found');
+    }
+
+    return device;
+  }
+
+
+
+
+  async getDevicesDetailsList(user: User): Promise<Device[]>{
+    const id=user.id
+    const device = await this.deviceRepository
+      .createQueryBuilder('device')
+      .leftJoinAndSelect('device.subscriptions', 'subscription')
+      .leftJoinAndSelect('device.locations', 'location')
+      .where('device.userId = :id', { id})
+      .getMany();
+   
+
+    if (!device) {
+      throw new NotFoundException('Device not found');
+    }
+
+    console.log(device)
+    return device;
+  }
+
+
 }

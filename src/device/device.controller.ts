@@ -22,6 +22,7 @@ export class DeviceController {
   
     @Get()
     async findAll(@GetUser() user: User) {
+      console.log("findall")
       return this.deviceService.findAll(user);
     }
   
@@ -43,4 +44,18 @@ export class DeviceController {
     async remove(@Param('id') id: number, @GetUser() user: User) {
       return this.deviceService.remove(id, user);
     }
+
+    @Get(':serialNumber/details')
+    async getDeviceDetails(@Param('serialNumber') serialNumber: string) {
+      return this.deviceService.getDeviceDetails(serialNumber);
+    }
+
+    @Get('details/list')
+    async getDevicesDetailsList(@GetUser() user: User) {
+     
+      return this.deviceService.getDevicesDetailsList(user);
+    }
+
+
+    
 }

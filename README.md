@@ -160,6 +160,17 @@ nest generate service Trip
 nest generate controller Trip
 
 
+
+
+nest generate module Plan
+nest generate service Plan
+nest generate controller Plan
+
+nest generate module Subscription
+nest generate service Subscription
+nest generate controller Subscription
+
+
 api
 
 curl -X POST http://localhost:3000/auth/register \

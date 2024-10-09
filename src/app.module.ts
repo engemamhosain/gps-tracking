@@ -15,6 +15,8 @@ import { GeofenceModule } from './geofence/geofence.module';
 import { AdminModule } from './admin/admin.module';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
+import { SubscriptionModule } from './subscription/subscription.module';
+import { PlanModule } from './plan/plan.module';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -44,6 +46,8 @@ import { join } from 'path';
   LocationModule,
   GeofenceModule,
   AdminModule,
+  SubscriptionModule,
+  PlanModule,
   ],
   controllers: [AppController],
   providers: [AppService],

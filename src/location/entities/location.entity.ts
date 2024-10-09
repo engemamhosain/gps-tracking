@@ -7,14 +7,25 @@ export class Location {
   @PrimaryGeneratedColumn()
   id: number;
 
+
+  @ManyToOne(() => Device, device => device.locations, { onDelete: 'CASCADE' }) // Establishing the relationship
+@JoinColumn({ name: 'device_serial_number', referencedColumnName: 'device_serial_number' }) // Specify the foreign key
+device: Device; // This sets up the inverse side of the relationship
+
+
   @Column({ unique: true })
   device_serial_number: string;
 
 
+  @Column()
+  speed: number;
 
-@ManyToOne(() => Device, device => device.locations, { onDelete: 'CASCADE' }) // Establishing the relationship
-@JoinColumn({ name: 'device_serial_number', referencedColumnName: 'device_serial_number' }) // Specify the foreign key
-device: Device; // This sets up the inverse side of the relationship
+  @Column()
+  engine_status: string;
+
+  @Column()
+  engine_locked: number;
+
 
   @Column('double')
   latitude: number; // Latitude of the location
