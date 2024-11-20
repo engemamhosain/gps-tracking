@@ -29,6 +29,10 @@ export class DeviceService {
     return this.deviceRepository.find({ where: { user:{id:user.id} } });
   }
 
+  async findAllDevice(): Promise<Device[]> {
+    return this.deviceRepository.find({});
+  }
+
   async findOne(id: number, user: User): Promise<Device> {
     return this.deviceRepository.findOne({ where: { id, user:{id:user.id} } });
   }

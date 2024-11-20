@@ -4,6 +4,8 @@ import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { join } from 'path';
+import { VersioningType } from '@nestjs/common';
+import * as hbs from 'hbs';
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
   // const app = await NestFactory.create(AppModule);
@@ -12,6 +14,15 @@ async function bootstrap() {
   app.setViewEngine('hbs');
   app.useStaticAssets(join(__dirname, '..', 'public')); // Serve static assets from 'public' folder
 
+  hbs.registerPartials(join(__dirname, '..', 'views', 'partials'));
+  app.enableVersioning({
+    defaultVersion: ['1', '2'],
+    type: VersioningType.URI
+  });
+
+  hbs.registerHelper('formatDate', (date, locale = 'en-US') => {
+    return new Date(date).toLocaleString(locale);
+  });
 
   // Configure Swagger
   const config = new DocumentBuilder()
