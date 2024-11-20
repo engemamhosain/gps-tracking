@@ -9,6 +9,9 @@ export class Device {
   @PrimaryGeneratedColumn()
   id: number;
 
+  // @Column()
+  // user_id: number;
+
   @Column({ unique: true })
   device_serial_number: string;
 

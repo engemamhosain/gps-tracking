@@ -239,6 +239,7 @@
                                                             <tr>
                                                                 <th class="w30">&nbsp;</th>
                                                                 <th>ID</th>
+                                                                <th>User Id</th>
                                                                 <th>Serial Number</th>
                                                                 <th>Vehicle Name</th>
                                                                 <th>Vehicle Number</th>
@@ -257,6 +258,7 @@
                                                                             </label>
                                                                         </td>
                                                                         <td><a href="#">{{id}}</a></td>
+                                                                        <td><a href="#">{{user_id}}</a></td>
                                                                         <td><span> {{device_serial_number}} </span></td>
                                                                         <td><span> {{vehicle_name}} </span></td>
                                                                         <td><span> {{vehicle_number}} </span></td>
@@ -295,13 +297,21 @@
                                     </div>
                                    <form class="card-body" method="post" action="/vehicles">
                                         <div class="row clearfix">
-                                            <div class="col-md-6 col-sm-12">
+
+                                            
+                                            <div class="col-md-2 col-sm-12">
+                                            <div class="form-group">
+                                                <label>User id</label>
+                                                <input type="number" class="form-control" name="user_id" required>
+                                            </div>
+                                            </div>
+                                            <div class="col-md-5 col-sm-12">
                                             <div class="form-group">
                                                 <label>Vehicle Name</label>
                                                 <input type="text" class="form-control" name="vehicle_name" required>
                                             </div>
                                             </div>
-                                            <div class="col-md-6 col-sm-12">
+                                            <div class="col-md-5 col-sm-12">
                                             <div class="form-group">
                                                 <label>Vehicle Number</label>
                                                 <input type="text" class="form-control" name="vehicle_number" required>

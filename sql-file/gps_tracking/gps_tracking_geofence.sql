@@ -1,0 +1,59 @@
+-- MySQL dump 10.13  Distrib 8.0.23, for Linux (x86_64)
+--
+-- Host: 103.199.168.131    Database: gps_tracking
+-- ------------------------------------------------------
+-- Server version	5.7.42-0ubuntu0.18.04.1-log
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!50503 SET NAMES utf8 */;
+/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
+/*!40103 SET TIME_ZONE='+00:00' */;
+/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+
+--
+-- Table structure for table `geofence`
+--
+
+DROP TABLE IF EXISTS `geofence`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `geofence` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `device_serial_number` varchar(255) NOT NULL,
+  `latitude` float NOT NULL,
+  `longitude` float NOT NULL,
+  `devicesId` int(11) DEFAULT NULL,
+  `radius` float NOT NULL,
+  `created_at` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
+  `name` varchar(255) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `FK_de14f282cf7731f4b0c627a094d` (`devicesId`),
+  CONSTRAINT `FK_de14f282cf7731f4b0c627a094d` FOREIGN KEY (`devicesId`) REFERENCES `device` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `geofence`
+--
+
+LOCK TABLES `geofence` WRITE;
+/*!40000 ALTER TABLE `geofence` DISABLE KEYS */;
+INSERT INTO `geofence` VALUES (9,'SN1234567894',0,0,4,0,'2024-10-08 14:41:49.800567',''),(10,'string',0,0,NULL,0,'2024-10-08 16:20:38.911444',''),(11,'string',0,0,NULL,0,'2024-10-08 16:21:15.981618',''),(12,'SN1234567891',0,0,3,0,'2024-10-08 16:21:53.042807',''),(13,'SN1234567890',0,0,NULL,0,'2024-10-08 16:22:02.645423',''),(14,'string',0,0,NULL,0,'2024-10-08 16:25:54.835691','');
+/*!40000 ALTER TABLE `geofence` ENABLE KEYS */;
+UNLOCK TABLES;
+/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
+
+/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
+/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
+/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
+
+-- Dump completed on 2024-11-20 17:53:59

@@ -30,8 +30,31 @@ export class DeviceService {
   }
 
   async findAllDevice(): Promise<Device[]> {
-    return this.deviceRepository.find({});
+    const device =  this.deviceRepository
+                  .createQueryBuilder('device')
+                  .leftJoinAndSelect('device.userId', 'userId')
+                  .getMany()
+    //     .leftJoinAndSelect('device.subscriptions', 'subscription')
+    return device
+   // return this.deviceRepository.find({});
   }
+
+
+  // async getDeviceDetails(serialNumber: string) {
+  //   const device = await this.deviceRepository
+  //     .createQueryBuilder('device')
+  //     .leftJoinAndSelect('device.subscriptions', 'subscription')
+  //     .leftJoinAndSelect('device.locations', 'location')
+  //     .where('device.device_serial_number = :serialNumber', { serialNumber })
+  //     .getOne();
+
+  //   if (!device) {
+  //     throw new NotFoundException('Device not found');
+  //   }
+
+  //   return device;
+  // }
+
 
   async findOne(id: number, user: User): Promise<Device> {
     return this.deviceRepository.findOne({ where: { id, user:{id:user.id} } });
